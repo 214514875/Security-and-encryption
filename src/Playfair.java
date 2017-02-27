@@ -95,7 +95,6 @@ public class Playfair {
                 col2 = ((int) getRowCol(text.charAt(cnt + 1), table).charAt(1)) - 48;
  
                 /*Find its corresponsing text and summ to the message string*/
-                System.out.println(row1 + " " + col1 + " " + row2 + " " + col2);
                 if (row1 == row2) {
                     message += table[row1][(col1 - 1) % 5] + "" + table[row2][(col2 - 1) % 5];
                 } else if (col1 == col2) {
@@ -106,6 +105,7 @@ public class Playfair {
 
                 cnt += 2;
             }
+            Display(table);
         } else {
             /*Encryption*/
             /*For loop for text length divided by two*/
@@ -118,7 +118,6 @@ public class Playfair {
                 col2 = ((int) getRowCol(text.charAt(cnt + 1), table).charAt(1)) - 48;
                 
                 /*Find its corresponsing cyphertext and summ to the message string*/
-                System.out.println(row1 + " " + col1 + " " + row2 + " " + col2);
                 if (row1 == row2) {
                     message += table[row1][(col1 + 1) % 5] + "" + table[row2][(col2 + 1) % 5];
                 } else if (col1 == col2) {
@@ -139,10 +138,10 @@ public class Playfair {
         Scanner kb = new Scanner(System.in);
 
         String key = "playfair";
-        //String text = "Friends for life";
-        String text = "LDENTITYVGPRPM";
+        String text = "Friends for life";
+        //String text = "LDENTITYVGPRPM";
 
-        System.out.println(obj.PlayFair(key, text, true));
+        System.out.println(obj.PlayFair(key, text, false));
     }
 
 }
