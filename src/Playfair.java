@@ -30,6 +30,7 @@ public class Playfair {
         return str;
     }
 
+    /*Displaying the 2D array*/
     void Display(char arr[][]) {
         for (int j = 0; j < 5; j++) {
             for (int i = 0; i < 5; i++) {
@@ -39,6 +40,7 @@ public class Playfair {
         }
     }
 
+    /*Get the row and col of a character in the Table*/
     String getRowCol(char ch, char[][] table) {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -49,14 +51,14 @@ public class Playfair {
         }
         return "";
     }
-
+ 
+    /*Function to encrypt and decrypt using the Playfair algorithm*/
     String PlayFair(String key, String text, boolean flag) {
         /*If True then decrpytion otherwise Encryption*/
          
         String message = "";
-        char[][] table = new char[5][5];
-        /*[rows][columns]*/
- /*To upper case and remove all Spaces also J->I* and removing Duplicate chars*/
+        char[][] table = new char[5][5];/*[rows][columns]*/
+        /*To upper case and remove all Spaces also J->I* and removing Duplicate chars*/
         key = removeDuplicates(key.toUpperCase().replaceAll(" ", "").replaceAll("J", "I"));
 
         /*Populating the 2D array with the keyword*/
@@ -81,15 +83,18 @@ public class Playfair {
             text += "X";
         }
 
+        /*Decrypting and Encrypting*/
         if (flag) {
             /*Decryption*/
             int row1, col1, row2, col2, cnt = 0;
             for (int i = 0; i < text.length() / 2; i++) {
+                /*Get the row and col of each char in the pair*/
                 row1 = ((int) getRowCol(text.charAt(cnt), table).charAt(0)) - 48;
                 col1 = ((int) getRowCol(text.charAt(cnt), table).charAt(1)) - 48;
                 row2 = ((int) getRowCol(text.charAt(cnt + 1), table).charAt(0)) - 48;
                 col2 = ((int) getRowCol(text.charAt(cnt + 1), table).charAt(1)) - 48;
-
+ 
+                /*Find its corresponsing text and summ to the message string*/
                 System.out.println(row1 + " " + col1 + " " + row2 + " " + col2);
                 if (row1 == row2) {
                     message += table[row1][(col1 - 1) % 5] + "" + table[row2][(col2 - 1) % 5];
@@ -103,14 +108,16 @@ public class Playfair {
             }
         } else {
             /*Encryption*/
- /*For loop for text length divided by two*/
+            /*For loop for text length divided by two*/
             int row1, col1, row2, col2, cnt = 0;
             for (int i = 0; i < text.length() / 2; i++) {
+                /*Get the row and col of each char in the pair*/
                 row1 = ((int) getRowCol(text.charAt(cnt), table).charAt(0)) - 48;
                 col1 = ((int) getRowCol(text.charAt(cnt), table).charAt(1)) - 48;
                 row2 = ((int) getRowCol(text.charAt(cnt + 1), table).charAt(0)) - 48;
                 col2 = ((int) getRowCol(text.charAt(cnt + 1), table).charAt(1)) - 48;
-
+                
+                /*Find its corresponsing cyphertext and summ to the message string*/
                 System.out.println(row1 + " " + col1 + " " + row2 + " " + col2);
                 if (row1 == row2) {
                     message += table[row1][(col1 + 1) % 5] + "" + table[row2][(col2 + 1) % 5];
@@ -136,7 +143,6 @@ public class Playfair {
         String text = "LDENTITYVGPRPM";
 
         System.out.println(obj.PlayFair(key, text, true));
-        //System.out.println(obj.getExclus(temp, tempp));
     }
 
 }
