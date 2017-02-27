@@ -1,4 +1,3 @@
-
 /**
  * Denver Pillay
  * 214514875
@@ -53,40 +52,37 @@ public class Playfair {
 
     String PlayFair(String key, String text, boolean flag) {
         /*If True then decrpytion otherwise Encryption*/
+         
+        String message = "";
+        char[][] table = new char[5][5];
+        /*[rows][columns]*/
+ /*To upper case and remove all Spaces also J->I* and removing Duplicate chars*/
+        key = removeDuplicates(key.toUpperCase().replaceAll(" ", "").replaceAll("J", "I"));
+
+        /*Populating the 2D array with the keyword*/
+        for (int i = 0; i < key.length(); i++) {
+            table[i / 5][i % 5] = key.charAt(i);
+        }
+
+        /*Populating with the remaining alphabets*/
+        String exclus = getExclus(alpha, key);
+        /*Getting Remaining alphabets*/
+        int count = 0;
+        for (int i = key.length(); i < 25; i++) {
+            table[i / 5][i % 5] = exclus.charAt(count);
+            count++;
+        }
+
+        /*Getting the encrypted text*/
+        text = text.replaceAll(" ", "").toUpperCase().replaceAll("J", "I");
+
+        /*If even length leave alone otherwise add a filler X*/
+        if (text.length() % 2 != 0) {
+            text += "X";
+        }
+
         if (flag) {
             /*Decryption*/
-        } else {
-            /*Encryption*/
-
-            char[][] table = new char[5][5];
-            /*[rows][columns]*/
- /*To upper case and remove all Spaces also J->I* and removing Duplicate chars*/
-            key = removeDuplicates(key.toUpperCase().replaceAll(" ", "").replaceAll("J", "I"));
-
-            /*Populating the 2D array with the keyword*/
-            for (int i = 0; i < key.length(); i++) {
-                table[i / 5][i % 5] = key.charAt(i);
-            }
-
-            /*Populating with the remaining alphabets*/
-            String exclus = getExclus(alpha, key);
-            /*Getting Remaining alphabets*/
-            int count = 0;
-            for (int i = key.length(); i < 25; i++) {
-                table[i / 5][i % 5] = exclus.charAt(count);
-                count++;
-            }
-
-            /*Getting the encrypted text*/
-            text = text.replaceAll(" ", "").toUpperCase().replaceAll("J", "I");
-
-            /*If even length leave alone otherwise add a filler X*/
-            if (text.length() % 2 != 0) {
-                text += "X";
-            }
-
-            /*For loop for text length divided by two*/
-            String message = "";
             int row1, col1, row2, col2, cnt = 0;
             for (int i = 0; i < text.length() / 2; i++) {
                 row1 = ((int) getRowCol(text.charAt(cnt), table).charAt(0)) - 48;
@@ -96,20 +92,39 @@ public class Playfair {
 
                 System.out.println(row1 + " " + col1 + " " + row2 + " " + col2);
                 if (row1 == row2) {
-                    message = table[row1][(col1 + 1) % 5] + "" + table[row2][(col2 + 1) % 5];
+                    message += table[row1][(col1 - 1) % 5] + "" + table[row2][(col2 - 1) % 5];
                 } else if (col1 == col2) {
-                    message = table[(row1 + 1) % 5][col1] + "" + table[(row2 + 1) % 5][col2];
+                    message += table[(row1 - 1) % 5][col1] + "" + table[(row2 - 1) % 5][col2];
                 } else {
-                    message = table[row1][col2] + "" + table[row2][col1];
+                    message += table[row1][col2] + "" + table[row2][col1];
                 }
 
                 cnt += 2;
             }
+        } else {
+            /*Encryption*/
+ /*For loop for text length divided by two*/
+            int row1, col1, row2, col2, cnt = 0;
+            for (int i = 0; i < text.length() / 2; i++) {
+                row1 = ((int) getRowCol(text.charAt(cnt), table).charAt(0)) - 48;
+                col1 = ((int) getRowCol(text.charAt(cnt), table).charAt(1)) - 48;
+                row2 = ((int) getRowCol(text.charAt(cnt + 1), table).charAt(0)) - 48;
+                col2 = ((int) getRowCol(text.charAt(cnt + 1), table).charAt(1)) - 48;
 
-            System.out.println(text);
+                System.out.println(row1 + " " + col1 + " " + row2 + " " + col2);
+                if (row1 == row2) {
+                    message += table[row1][(col1 + 1) % 5] + "" + table[row2][(col2 + 1) % 5];
+                } else if (col1 == col2) {
+                    message += table[(row1 + 1) % 5][col1] + "" + table[(row2 + 1) % 5][col2];
+                } else {
+                    message += table[row1][col2] + "" + table[row2][col1];
+                }
+
+                cnt += 2;
+            }
             Display(table);
         }
-        return "";
+        return message;
     }
 
     public static void main(String[] args) {
@@ -117,9 +132,10 @@ public class Playfair {
         Scanner kb = new Scanner(System.in);
 
         String key = "playfair";
-        String text = "I am a big boy a";
+        //String text = "Friends for life";
+        String text = "LDENTITYVGPRPM";
 
-        obj.PlayFair(key, text, false);
+        System.out.println(obj.PlayFair(key, text, true));
         //System.out.println(obj.getExclus(temp, tempp));
     }
 
